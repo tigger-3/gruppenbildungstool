@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ConfigService {
-  constructor(private http: HttpClient) { }
+  moodle_address?: string;
+  webservice_token?: string;
+
+  constructor() { }
 }

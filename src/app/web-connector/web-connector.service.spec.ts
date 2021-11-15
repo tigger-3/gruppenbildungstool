@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TeilnehmerService } from './teilnehmer.service';
+import { WebConnectorService } from './web-connector.service';
 
-describe('TeilnehmerService', () => {
-  let service: TeilnehmerService;
+describe('WebConnectorService', () => {
+  let service: WebConnectorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TeilnehmerService);
+    service = TestBed.inject(WebConnectorService);
   });
 
   it('should be created', () => {
