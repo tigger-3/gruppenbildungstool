@@ -1,6 +1,14 @@
 <div id="error" *ngIf="error">{{error}}</div>
 <div id="success" *ngIf="success">{{success}}</div>
 
+<p>
+  {{time | async}}
+</p>
+
+<p>
+  {{token}}
+</p>
+
 <div id="theList">
   <h2>The list</h2>
   <ul>

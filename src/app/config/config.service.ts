@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class ConfigService {
   moodle_address?: string;
   webservice_token?: string;
+  service_shortname ?: string;
 
   constructor() { }
 }
