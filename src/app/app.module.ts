@@ -49,7 +49,6 @@ function initialize(http: HttpClient, config: ConfigService) {
       http.get('./config.json').pipe(
            map((x: ConfigService) => {
              config.moodle_address = x.moodle_address;
-             config.webservice_token = x.webservice_token;
              config.service_shortname = x.service_shortname;
              resolve(true);
            })

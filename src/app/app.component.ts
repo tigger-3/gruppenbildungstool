@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Teilnehmer} from './teilnehmer/teilnehmer';
-import {Gruppe} from './gruppe/gruppe';
 import { WebConnectorService } from './web-connector/web-connector.service';
 import { Observable } from 'rxjs';
+import { Teilnehmer } from './model/teilnehmer/teilnehmer';
+import { Gruppe } from './model/gruppe/gruppe';
 
 
 
