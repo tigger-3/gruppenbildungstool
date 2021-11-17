@@ -44,7 +44,7 @@ export class WebConnectorService {
     return this.sendApiRequest(
       "core_user_get_users",
       token,
-      `criteria[0][key]=Username&criteria[0][value]=${username}`
+      `criteria[0][key]=username&criteria[0][value]=${username}`
     ).pipe(
       map((res: any) => {
         return res['users'][0]['id']

@@ -13,12 +13,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { ListScreenComponent } from './list-screen/list-screen.component';
+import { KursScreenComponent } from './kurs-screen/kurs-screen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginScreenComponent,
-    ListScreenComponent
+    ListScreenComponent,
+    KursScreenComponent
   ],
   imports: [
     BrowserModule,

@@ -1,2 +1,7 @@
 <p>list-screen works!</p>
 <p>{{getToken()}}</p>
+<div #kursliste>
+  <p *ngFor="let kurs of kurse">
+    <a [routerLink]="['/kurs',kurs.id]">{{kurs.fullname}}</a>
+  </p>
+</div>
