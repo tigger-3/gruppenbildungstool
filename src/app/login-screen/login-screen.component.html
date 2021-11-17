@@ -1,12 +1,27 @@
-<p>login {{message}}</p>
+
+<button mat-button [matMenuTriggerFor]="menu">Hauptmenü</button>
+<mat-menu #menu="matMenu" yPosition="above">
+  <button mat-menu-item>Item 1</button>
+  <button mat-menu-item>Item 2</button>
+</mat-menu>
+<p>Login-Status: {{message}}</p>
+<br>
+<div style="font-size: 18px" style="text-align:center;">
+  <picture>
+   <img source media='(min-width:0px)' src="assets/atiw.jfif">
+  </picture>
+  <br>
   <mat-form-field appearance="fill">
     <mat-label>Benutzername</mat-label>
     <input matInput #username>
   </mat-form-field>
   <br>
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" yPosition="middle">
     <mat-label>Passwort</mat-label>
     <input matInput type="password" #password>
   </mat-form-field>
   <br>
   <button mat-button (click)="submitLogin(username.value,password.value)">Anmelden</button>
+  <br>
+  <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+</div>
