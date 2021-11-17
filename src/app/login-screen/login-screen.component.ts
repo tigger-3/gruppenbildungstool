@@ -14,6 +14,7 @@ export class LoginScreenComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
+    this.userService.logOut();
   }
 
   submitLogin(username: string, password: string){
