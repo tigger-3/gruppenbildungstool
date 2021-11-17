@@ -19,16 +19,26 @@ export class UserService {
   logIn(username: string, password: string): Observable<boolean>{
     this.logOut();
     return new Observable<boolean>((sub) =>
-      this.wcs.getUserToken(username, password).subscribe((token) => {
-        this.token = token;
-        if(token!=undefined){
-          this.wcs.getUserId(username,token).subscribe((id)=>{
-            this.userid = id;
-            sub.next(this.isLoggedIn());
-          })
-        }
-        else{
-          sub.next(false);
+      this.wcs.getUserToken(username, password).subscribe({
+        next: (token) => {
+          this.token = token;
+          if(token!=undefined){
+            this.wcs.getUserId(username,token).subscribe({
+              next: (id)=>{
+                this.userid = id;
+                sub.next(this.isLoggedIn());
+              },
+              error: (error) => {
+                sub.next(false); //Verbindungsfehler
+              }
+            })
+          }
+          else{
+            sub.next(false); //falsches Konto
+          }
+        },
+        error: (error)=>{
+          sub.next(false); //Verbindungsfehler
         }
       })
     );
