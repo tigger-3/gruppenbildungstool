@@ -68,6 +68,18 @@ export class WebConnectorService {
     )
   }
 
+  getEnrolledUsers(kursid: number, token: string){
+    return this.sendApiRequest(
+      "core_enrol_get_enrolled_users",
+      token,
+      `courseid=${kursid}`
+    ).pipe(
+      map((res: any) => {
+        let temp = res; //todo filter only users with role student
+      })
+    )
+  }
+
   // getAll(){
 
   //   return this.http.get('${this.baseUrl}/list').pipe(
