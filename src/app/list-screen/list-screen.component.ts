@@ -12,6 +12,7 @@ export class ListScreenComponent implements OnInit {
 
   kurse: Kurs[];
 
+
   constructor(private userService: UserService, private wcs: WebConnectorService) { this.kurse = [] }
 
   ngOnInit(): void {
