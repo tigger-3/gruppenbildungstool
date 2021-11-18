@@ -93,4 +93,17 @@ export class KursScreenComponent implements OnInit {
     }
   }
 
+  getGruppenkarteClass(gruppe: Gruppe): string{
+    if(gruppe.members && gruppe.members.length>0){
+      return "active"
+    }
+    else{
+      return "inactive"
+    }
+  }
+
+  sendGroupsToMoodle(){
+    //TODO
+  }
+
 }
