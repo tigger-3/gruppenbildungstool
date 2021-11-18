@@ -106,6 +106,27 @@ export class WebConnectorService {
     )
   }
 
+  //returns id
+  createGroup(token: string, kursid: number, name: string, description: string){
+    return this.sendApiRequest(
+      "core_group_create_groups",
+      token,
+      `groups[0][courseid]=${kursid}&groups[0][name]=${name}&groups[0][description]=${description}`
+    ).pipe(
+      map((res) => {
+        return res[0]['id'];
+      })
+    )
+  }
+
+  addGroupMembers(token: string, groupid: number, userid: number){
+    return this.sendApiRequest(
+      "core_group_add_group_members",
+      token,
+      `members[0][groupid]=${groupid}&members[0][userid]=${userid}`
+    )
+  }
+
   // getAll(){
 
   //   return this.http.get('${this.baseUrl}/list').pipe(

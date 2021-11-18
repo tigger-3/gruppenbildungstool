@@ -1,6 +1,4 @@
 export interface Teilnehmer {
-
   id: number;
-  name: String;
-
+  name: string;
 }

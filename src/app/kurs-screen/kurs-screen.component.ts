@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Gruppe } from '../model/gruppe/gruppe';
 import { Teilnehmer } from '../model/teilnehmer/teilnehmer';
 import { UserService } from '../user-service/user.service';
@@ -103,7 +103,20 @@ export class KursScreenComponent implements OnInit {
   }
 
   sendGroupsToMoodle(){
-    //TODO
+    this.gruppen.forEach((group) =>
+      this.wcs.createGroup(this.userService.token!,this.kursid!,group.name,'').subscribe(
+         {
+           next: (id)=>group.id=id,
+           //error: (error)=>{},
+           complete: ()=>{
+             group.members.forEach((member)=>{
+               this.wcs.addGroupMembers(this.userService.token!,group.id!,member.id)
+             })
+           }
+         }
+      )
+    )
+    //TODO redirect to moodle
   }
 
 }
