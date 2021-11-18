@@ -15,15 +15,21 @@
     </div>
   </mat-tab>
   <mat-tab [disabled]="!areGroupsGenerated()" label="Gruppenübersicht">
-    <mat-card *ngFor="let gruppe of gruppen">
-      <h3>Gruppe benennen</h3>
-      <mat-form-field>
-        <mat-label>Gruppenname</mat-label>
-        <input [(ngModel)]="gruppe.name" matInput>
-      </mat-form-field>
-      <p *ngFor="let member of gruppe.members">
-        {{member.name}}
-      </p>
-    </mat-card>
+    <mat-grid-list cols="4">
+      <mat-card *ngFor="let gruppe of gruppen">
+        <!-- <h3>{{gruppe.name}}</h3> -->
+        <mat-card-title>
+          <mat-form-field>
+            <mat-label>Gruppenname</mat-label>
+            <input [(ngModel)]="gruppe.name" matInput>
+          </mat-form-field>
+        </mat-card-title>
+        <mat-card-content>
+          <p *ngFor="let member of gruppe.members">
+            {{member.name}}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-list>
   </mat-tab>
 </mat-tab-group>
