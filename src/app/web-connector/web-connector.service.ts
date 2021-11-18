@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { ConfigService } from '../config/config.service';
 import { Kurs } from '../model/kurs/kurs';
+import { Teilnehmer } from '../model/teilnehmer/teilnehmer';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,13 @@ export class WebConnectorService {
       `${this.baseUrl}/webservice/rest/server.php`,
       `moodlewsrestformat=json&wsfunction=${wsfunction}&wstoken=${wstoken}`+ (payload ? (`&` + payload) : ``),
       {'headers':{'Accept':'application/json','Content-type':'application/x-www-form-urlencoded'}}
+    ).pipe(
+      map((res: any) => {
+        if(res['error']){
+          throw {type:res['errorcode'],message:res['error']}
+        }
+        return res
+      })
     )
   }
 
@@ -35,6 +43,9 @@ export class WebConnectorService {
       {'headers':{'Accept':'application/json','Content-type':'application/x-www-form-urlencoded'}}
     ).pipe(
       map((res: any) => {
+        if(res['error']){
+          throw {type:res['errorcode'],message:res['error']}
+        }
         return res['token']
       })
     )
@@ -68,14 +79,29 @@ export class WebConnectorService {
     )
   }
 
-  getEnrolledUsers(kursid: number, token: string){
+  getEnrolledUsers(kursid: number, token: string, roleFilter?: string[]){
     return this.sendApiRequest(
       "core_enrol_get_enrolled_users",
       token,
       `courseid=${kursid}`
     ).pipe(
       map((res: any) => {
-        let temp = res; //todo filter only users with role student
+        let temp: any[] = res; //todo filter only users with role student
+        if(roleFilter){
+          temp = temp.filter((enrolledUser) => {
+            let userroles: any[] = enrolledUser['roles'];
+            return userroles.some((userrole)=>{
+              return roleFilter.some((filterrole)=>{
+                return userrole['shortname'] == filterrole
+              })
+            })
+          })
+        }
+        let out: Teilnehmer[] = []
+        temp.forEach((tempTN) => {
+          out.push({id: tempTN['id'],name: tempTN['fullname']})
+        })
+        return out;
       })
     )
   }

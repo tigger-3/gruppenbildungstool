@@ -1,1 +1,29 @@
-<p>kurs-screen works!</p>
+<mat-label>Gruppenanzahl: {{gruppenanzahl}}</mat-label>
+<mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppenanzahl" (change)="gruppenanzahlChanged($event.value!)"></mat-slider>
+<br>
+<mat-label>Maximale Gruppengröße: {{gruppengroesse}}</mat-label>
+<mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppengroesse" (change)="gruppengroesseChanged($event.value!)"></mat-slider>
+<br>
+<button mat-button (click)="generateGroups()">Gruppen generieren</button>
+<button mat-button [disabled]="!areGroupsGenerated()">Gruppen abschicken</button>
+<mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event">
+  <mat-tab label="Kursübersicht">
+    <div #teilnehmer>
+      <p *ngFor="let teilnehmer of kursteilnehmer">
+        {{teilnehmer.name}}
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab [disabled]="!areGroupsGenerated()" label="Gruppenübersicht">
+    <mat-card *ngFor="let gruppe of gruppen">
+      <h3>Gruppe benennen</h3>
+      <mat-form-field>
+        <mat-label>Gruppenname</mat-label>
+        <input [(ngModel)]="gruppe.name" matInput>
+      </mat-form-field>
+      <p *ngFor="let member of gruppe.members">
+        {{member.name}}
+      </p>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
