@@ -10,10 +10,10 @@
     <button mat-button (click)="generateGroups()">Gruppen generieren</button>
   <!-- </mat-grid-tile>
   <mat-grid-tile> -->
-    <!-- <mat-form-field matTooltip='Dies ist der Name der Gruppenarbeit. Er wird als "Gruppierung" in Moodle angezeigt und muss ausgewählt werden, um die Gruppen für eine Abgabe auszuwählen.'>
+    <mat-form-field matTooltip='Dies ist der Name der Gruppenarbeit. Er wird als "Gruppierung" in Moodle angezeigt und muss ausgewählt werden, um die Gruppen für eine Abgabe auszuwählen.'>
       <mat-label>Name der Gruppenarbeit</mat-label>
       <input matInput type="text" [(ngModel)]="grouping">
-    </mat-form-field> -->
+    </mat-form-field>
     <button mat-button (click)="sendGroupsToMoodle()" [disabled]="!areGroupsGenerated()">Gruppen abschicken</button>
   <!-- </mat-grid-tile>
 </mat-grid-list> -->

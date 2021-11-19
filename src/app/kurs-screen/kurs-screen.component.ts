@@ -140,6 +140,8 @@ export class KursScreenComponent implements OnInit {
                       error: (error)=>{let temp = error}
                     })
                   })
+
+                  this.router.navigate(['/complete', this.kursid!])
                 // )
               }
             }
@@ -147,8 +149,6 @@ export class KursScreenComponent implements OnInit {
         )
     //   }
     // })
-
-    this.router.navigate(['/complete', this.kursid!])
   }
 
   resetError(){
