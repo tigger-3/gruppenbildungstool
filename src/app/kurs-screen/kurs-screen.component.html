@@ -1,11 +1,22 @@
-<mat-label>Gruppenanzahl: {{gruppenanzahl}}</mat-label>
-<mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppenanzahl" (change)="gruppenanzahlChanged($event.value!)"></mat-slider>
-<br>
-<mat-label>Maximale Gruppengröße: {{gruppengroesse}}</mat-label>
-<mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppengroesse" (change)="gruppengroesseChanged($event.value!)"></mat-slider>
-<br>
-<button mat-button (click)="generateGroups()">Gruppen generieren</button>
-<button mat-button (click)="sendGroupsToMoodle()" [disabled]="!areGroupsGenerated()">Gruppen abschicken</button>
+<p #error>{{errormsg}}</p>
+<!-- <mat-grid-list cols="2">
+  <mat-grid-tile> -->
+    <mat-label>Gruppenanzahl: {{gruppenanzahl}}</mat-label>
+    <mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppenanzahl" (change)="gruppenanzahlChanged($event.value!)"></mat-slider>
+    <br>
+    <mat-label>Maximale Gruppengröße: {{gruppengroesse}}</mat-label>
+    <mat-slider min="1" [max]="kursteilnehmer.length" step=1 [(ngModel)]="gruppengroesse" (change)="gruppengroesseChanged($event.value!)"></mat-slider>
+    <br>
+    <button mat-button (click)="generateGroups()">Gruppen generieren</button>
+  <!-- </mat-grid-tile>
+  <mat-grid-tile> -->
+    <!-- <mat-form-field matTooltip='Dies ist der Name der Gruppenarbeit. Er wird als "Gruppierung" in Moodle angezeigt und muss ausgewählt werden, um die Gruppen für eine Abgabe auszuwählen.'>
+      <mat-label>Name der Gruppenarbeit</mat-label>
+      <input matInput type="text" [(ngModel)]="grouping">
+    </mat-form-field> -->
+    <button mat-button (click)="sendGroupsToMoodle()" [disabled]="!areGroupsGenerated()">Gruppen abschicken</button>
+  <!-- </mat-grid-tile>
+</mat-grid-list> -->
 <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event">
   <mat-tab label="Kursübersicht">
     <div #teilnehmer>
@@ -19,13 +30,11 @@
       <mat-grid-tile *ngFor="let gruppe of gruppen">
         <mat-card [ngClass]="getGruppenkarteClass(gruppe)">
           <!-- <h3>{{gruppe.name}}</h3> -->
-          <mat-card-title>
+          <mat-card-content>
             <mat-form-field>
               <mat-label>Gruppenname</mat-label>
               <input [(ngModel)]="gruppe.name" matInput>
             </mat-form-field>
-          </mat-card-title>
-          <mat-card-content>
             <p *ngFor="let member of gruppe.members">
               {{member.name}}
             </p>

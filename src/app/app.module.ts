@@ -15,13 +15,15 @@ import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { ListScreenComponent } from './list-screen/list-screen.component';
 import { KursScreenComponent } from './kurs-screen/kurs-screen.component';
 import { FormsModule } from '@angular/forms';
+import { CompletionScreenComponent } from './completion-screen/completion-screen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginScreenComponent,
     ListScreenComponent,
-    KursScreenComponent
+    KursScreenComponent,
+    CompletionScreenComponent
   ],
   imports: [
     BrowserModule,
