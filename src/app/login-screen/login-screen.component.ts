@@ -21,16 +21,21 @@ export class LoginScreenComponent implements OnInit {
     this.percentage = 50;
     this.message = "im Gange"
     this.percentage = 70;
-    this.userService.logIn(username,password).subscribe((v)=>{
-      if(v){
-        this.message = "erfolgreich"
-        this.router.navigate(['/list'])
-        this.percentage = 100;
+    this.userService.logIn(username,password).subscribe(
+      {
+        next: (v)=>{
+        },
+        error: (error) => {
+          this.message = `fehlgeschlagen - Fehlercode: ${error.type} - Fehlernachricht: ${error.message}`
+          this.percentage = 0;
+        },
+        complete: () => {
+          this.message = "erfolgreich"
+          this.router.navigate(['/list'])
+          this.percentage = 100;
+        }
       }
-      else{this.message = "fehlgeschlagen"}
-      this.percentage = 0;
-
-    })
+    )
   }
 
 }

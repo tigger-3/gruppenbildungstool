@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { WebConnectorService } from '../web-connector/web-connector.service';
 
 @Injectable({
@@ -19,16 +19,33 @@ export class UserService {
   logIn(username: string, password: string): Observable<boolean>{
     this.logOut();
     return new Observable<boolean>((sub) =>
-      this.wcs.getUserToken(username, password).subscribe((token) => {
-        this.token = token;
-        if(token!=undefined){
-          this.wcs.getUserId(username,token).subscribe((id)=>{
-            this.userid = id;
-            sub.next(this.isLoggedIn());
-          })
-        }
-        else{
-          sub.next(false);
+      this.wcs.getUserToken(username, password).subscribe({
+        next: (token) => {
+          this.token = token;
+        },
+        error: (error)=>{
+          sub.error(error); //Verbindungsfehler
+        },
+        complete: () => {
+          if(this.token!=undefined){
+            this.wcs.getUserId(username,this.token)
+            .subscribe({
+              next: (id)=>{
+                this.userid = id;
+              },
+              error: (error) => {
+                sub.error(error); //Verbindungsfehler
+              },
+              complete: () => {
+                sub.next(this.isLoggedIn());
+                sub.complete();
+              }
+            })//*/
+          }
+          else{
+            sub.next(false); //falsches Konto
+            sub.complete();
+          }
         }
       })
     );

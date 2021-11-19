@@ -14,6 +14,7 @@ import { MaterialModule } from './material.module';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { ListScreenComponent } from './list-screen/list-screen.component';
 import { KursScreenComponent } from './kurs-screen/kurs-screen.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { KursScreenComponent } from './kurs-screen/kurs-screen.component';
     HttpClientModule,
     AppRoutingModule,
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
   ],
   providers: [
     {

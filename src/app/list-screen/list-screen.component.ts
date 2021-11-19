@@ -26,9 +26,12 @@ export class ListScreenComponent implements OnInit {
   recallKurse(){
     const userid = this.userService.userid?this.userService.userid:0;
     const token = this.userService.token?this.userService.token:"";
-    this.wcs.getUsersCourses(userid,token).subscribe((kurse)=>
-      this.kurse=kurse
-    )
+    this.wcs.getUsersCourses(userid,token).subscribe({
+      next: (kurse) =>
+        this.kurse=kurse,
+      error: (error) => {},
+      complete: () => {}
+    })
   }
 
 }
