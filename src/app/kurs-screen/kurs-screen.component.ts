@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Gruppe } from '../model/gruppe/gruppe';
 import { Teilnehmer } from '../model/teilnehmer/teilnehmer';
 import { UserService } from '../user-service/user.service';
@@ -15,7 +15,12 @@ export class KursScreenComponent implements OnInit {
   kursid?: number
   kursteilnehmer: Teilnehmer[] = [];
 
+  grouping: string = "";
+
   gruppen: Gruppe[] = [];
+
+  errormsg: string = "";
+  errorsource: string = ""
 
   selectedTab = 0;
 
@@ -28,7 +33,8 @@ export class KursScreenComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private wcs: WebConnectorService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
     ) {
       this.gruppenanzahl = 1;
       this.gruppengroesse = 1;
@@ -37,6 +43,7 @@ export class KursScreenComponent implements OnInit {
   ngOnInit(): void {
     this.kursid = Number.parseInt(this.route.snapshot.paramMap.get('id')!);
     this.getKursTeilnehmer();
+    this.grouping = `GA ${new Date(Date.now()).toLocaleDateString()}`;
   }
 
   getKursTeilnehmer(){
@@ -56,7 +63,7 @@ export class KursScreenComponent implements OnInit {
   generateGroups(){
     this.gruppen = []
     for(let i = 0; i < this.gruppenanzahl; i++){
-      this.gruppen.push({name: `Gruppe ${i+1}`, members:[]})
+      this.gruppen.push({name: `Gruppe ${i+1} (${new Date(Date.now()).toLocaleDateString()})`, members:[]})
     }
     this.kursteilnehmer.forEach((teilnehmer)=>{
       let gruppeFound = false
@@ -91,6 +98,62 @@ export class KursScreenComponent implements OnInit {
       this.gruppenanzahl = tempanzahl;
       //this.gruppenanzahlChange.emit(tempanzahl);
     }
+  }
+
+  getGruppenkarteClass(gruppe: Gruppe): string{
+    if(gruppe.members && gruppe.members.length>0){
+      return "active"
+    }
+    else{
+      return "inactive"
+    }
+  }
+
+  sendGroupsToMoodle(){
+    this.resetError()
+    // let groupingid = 0;
+    this.wcs.createGrouping(this.userService.token!,this.kursid!,this.grouping,'').subscribe()
+    // .subscribe({
+    //   next: (id)=>{groupingid = id},
+    //   error: (error)=>{
+    //     if(error.type=='invalidparameter'){
+    //       this.errormsg = "Der Name der Gruppenarbeit darf weder leer sein, noch den Namen von bereits bestehenden Gruppenarbeiten entsprechen!"
+    //     }
+    //   },
+    //   complete: ()=>{
+        this.gruppen.forEach((group) =>
+          this.wcs.createGroup(this.userService.token!,this.kursid!,group.name,'').subscribe(
+            {
+              next: (id)=>group.id=id,
+              error: (error)=>{
+                if(error.type=='invalidparameter'){
+                  this.errormsg = "Die Gruppennamen dürfen weder leer sein, noch den Namen von bereits bestehenden Gruppen entsprechen!"
+                }
+              },
+              complete: ()=>{
+                // //Gruppierung assignen
+                // this.wcs.assignGrouping(this.userService.token!,groupingid,group.id!)
+                //Gruppenmitglieder hinzufügen
+                // new Promise(resolve => setTimeout(resolve,1000)).then( ()=>
+                  group.members.forEach((member)=>{
+                    this.wcs.addGroupMembers(this.userService.token!,group.id!,member.id).subscribe({
+                      error: (error)=>{let temp = error}
+                    })
+                  })
+                // )
+              }
+            }
+          )
+        )
+    //   }
+    // })
+
+    this.router.navigate(['/complete', this.kursid!])
+  }
+
+  resetError(){
+    this.errormsg="";
+    this.errorsource="";
   }
 
 }

@@ -31,6 +31,9 @@ export class WebConnectorService {
         if(res['error']){
           throw {type:res['errorcode'],message:res['error']}
         }
+        if(res['exception']){
+          throw {type:res['errorcode'],message:res['exception']}
+        }
         return res
       })
     )
@@ -103,6 +106,47 @@ export class WebConnectorService {
         })
         return out;
       })
+    )
+  }
+
+  createGrouping(token: string, kursid: number, name: string, description: string){
+    return this.sendApiRequest(
+      "core_group_create_groupings",
+      token,
+      `groupings[0][courseid]=${kursid}&groupings[0][name]=${name}&groupings[0][description]=${description}`
+    ).pipe(
+      map((res) => {
+        return res[0]['id'];
+      })
+    )
+  }
+
+  //returns id
+  createGroup(token: string, kursid: number, name: string, description: string){
+    return this.sendApiRequest(
+      "core_group_create_groups",
+      token,
+      `groups[0][courseid]=${kursid}&groups[0][name]=${name}&groups[0][description]=${description}`
+    ).pipe(
+      map((res) => {
+        return res[0]['id'];
+      })
+    )
+  }
+
+  assignGrouping(token: string, groupingid: number, groupid: number){
+    return this.sendApiRequest(
+      "core_group_assign_grouping",
+      token,
+      `assignments[0][groupingid]=${groupingid}&assignments[0][groupid]=${groupid}`
+    )
+  }
+
+  addGroupMembers(token: string, groupid: number, userid: number){
+    return this.sendApiRequest(
+      "core_group_add_group_members",
+      token,
+      `members[0][groupid]=${groupid}&members[0][userid]=${userid}`
     )
   }
 
