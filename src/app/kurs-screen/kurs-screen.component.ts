@@ -111,17 +111,25 @@ export class KursScreenComponent implements OnInit {
 
   sendGroupsToMoodle(){
     this.resetError()
-    // let groupingid = 0;
-    this.wcs.createGrouping(this.userService.token!,this.kursid!,this.grouping,'').subscribe()
-    // .subscribe({
-    //   next: (id)=>{groupingid = id},
-    //   error: (error)=>{
-    //     if(error.type=='invalidparameter'){
-    //       this.errormsg = "Der Name der Gruppenarbeit darf weder leer sein, noch den Namen von bereits bestehenden Gruppenarbeiten entsprechen!"
-    //     }
-    //   },
-    //   complete: ()=>{
-        this.gruppen.forEach((group) =>
+    let groupingid = 0;
+    this.wcs.createGrouping(this.userService.token!,this.kursid!,this.grouping,'')
+    .subscribe({
+      next: (id)=>{groupingid = id},
+      error: (error)=>{
+        if(error.type=='invalidparameter'){
+          this.errormsg = "Der Name der Gruppenarbeit darf weder leer sein, noch den Namen von bereits bestehenden Gruppenarbeiten entsprechen!"
+        }
+        else if(error.type=='invalidresponse'){
+          this.sendGroupsAfterGroupingCreated()
+        }
+      },
+      complete: ()=>{
+        this.sendGroupsAfterGroupingCreated(groupingid)
+      }
+    })
+  }
+  private sendGroupsAfterGroupingCreated(groupingid?:number){
+    this.gruppen.forEach((group) =>
           this.wcs.createGroup(this.userService.token!,this.kursid!,group.name,'').subscribe(
             {
               next: (id)=>group.id=id,
@@ -132,9 +140,8 @@ export class KursScreenComponent implements OnInit {
               },
               complete: ()=>{
                 // //Gruppierung assignen
-                // this.wcs.assignGrouping(this.userService.token!,groupingid,group.id!)
+                if(groupingid){this.wcs.assignGrouping(this.userService.token!,groupingid,group.id!)} //funktioniert bei Testmoodle nicht
                 //Gruppenmitglieder hinzufügen
-                // new Promise(resolve => setTimeout(resolve,1000)).then( ()=>
                   group.members.forEach((member)=>{
                     this.wcs.addGroupMembers(this.userService.token!,group.id!,member.id).subscribe({
                       error: (error)=>{let temp = error}
@@ -142,13 +149,10 @@ export class KursScreenComponent implements OnInit {
                   })
 
                   this.router.navigate(['/complete', this.kursid!])
-                // )
               }
             }
           )
         )
-    //   }
-    // })
   }
 
   resetError(){
