@@ -131,6 +131,9 @@ export class KursScreenComponent implements OnInit {
     })
   }
   private sendGroupsAfterGroupingCreated(groupingid?:number){
+    let groupsToGo = this.gruppen.length
+    let error = false;
+    let groupsCompleted = [];
     this.gruppen.forEach((group) =>
           this.wcs.createGroup(this.userService.token!,this.kursid!,group.name,'').subscribe(
             {
@@ -138,6 +141,9 @@ export class KursScreenComponent implements OnInit {
               error: (error)=>{
                 if(error.type=='invalidparameter'){
                   this.errormsg = "Die Gruppennamen dürfen weder leer sein, noch den Namen von bereits bestehenden Gruppen entsprechen!"
+                  error=true;
+                  //TODO revert completed groups
+                  //TODO revert grouping
                 }
               },
               complete: ()=>{
@@ -150,7 +156,13 @@ export class KursScreenComponent implements OnInit {
                     })
                   })
 
-                  this.router.navigate(['/complete', this.kursid!])
+                  if(error){
+                    //TODO revert group
+                  }
+                  else{
+                    groupsCompleted.push(group)
+                  }
+                  if(--groupsToGo==0){this.router.navigate(['/complete', this.kursid!])}
               }
             }
           )
