@@ -3,6 +3,7 @@ import { WebConnectorService } from './web-connector/web-connector.service';
 import { Observable } from 'rxjs';
 import { Teilnehmer } from './model/teilnehmer/teilnehmer';
 import { Gruppe } from './model/gruppe/gruppe';
+import { UserService } from './user-service/user.service';
 
 
 
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit {
   });
 
   constructor(
-    private wcs: WebConnectorService
+    private wcs: WebConnectorService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,10 @@ export class AppComponent implements OnInit {
         this.token = output
       }
     );
+  }
+
+  isLoggedIn(){
+    return this.userService.isLoggedIn()
   }
 
   title = 'gruppenbildungstool';

@@ -1,74 +1,17 @@
-<p>list-screen works!</p>
-<p>{{getToken()}}</p>
-<div #kursliste>
+<!-- <div #kursliste>
   <p *ngFor="let kurs of kurse">
     <a [routerLink]="['/kurs',kurs.id]">{{kurs.fullname}}</a>
   </p>
-  </div>
-  <p>list-screen works!</p>
-<p>{{getToken()}}</p>
-<div #kursliste>
-  <p *ngFor="let kurs of kurse">
-    <a [routerLink]="['/kurs',kurs.id]">{{kurs.fullname}}</a>
-  </p>
-  </div>
-  <mat-card class="Kurs1">
-    <mat-card-header>
-      <img
-        src="https://www.freakyjolly.com/wp-content/uploads/2021/07/cropped-cropped-fj-logo-192-removebg-preview-e1625997712615-1.png"
-        mat-card-avatar />
-      <mat-card-title>Kurs 1</mat-card-title>
-      <mat-card-subtitle>
-        Kursliste, die die Schüler bereithält
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-       Hier sehen Sie die Kurse und können diese anklicken!
-      </p>
-        <mat-card-header>
-          <img
-            src="https://www.freakyjolly.com/wp-content/uploads/2021/07/cropped-cropped-fj-logo-192-removebg-preview-e1625997712615-1.png"
-            mat-card-avatar />
-          <mat-card-title>Kurs 2</mat-card-title>
-          <mat-card-subtitle>
-            Kursliste, die die Schüler bereithält
-          </mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>
-           Hier sehen Sie die Kurse und können diese anklicken!
-          </p>
+</div> -->
 
-            <mat-card-header>
-              <img
-                src="https://www.freakyjolly.com/wp-content/uploads/2021/07/cropped-cropped-fj-logo-192-removebg-preview-e1625997712615-1.png"
-                mat-card-avatar />
-              <mat-card-title>Kurs 3</mat-card-title>
-              <mat-card-subtitle>
-                Kursliste, die die Schüler bereithält
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <p>
-               Hier sehen Sie die Kurse und können diese anklicken!
-              </p>
-
-      <mat-grid-list cols="4" rowHeight="100px">
-       <!--  <mat-grid-tile
-            *ngFor="let kurs of kurse"
-           </mat-grid-tile> [colspan]="kurse.cols"
-            [rowspan]="kurse.rows"
-            [style.background]="kurse.color">
-          {{kurse.text}}
-        </mat-grid-tile>-->
-      </mat-grid-list>
-    </mat-card-content>
-
-
-
-  <button mat-raised-button color="maroon">Zurück</button>
-      <button mat-raised-button color="primary">Vorwärts</button>
-
-
-
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile *ngFor="let kurs of kurse">
+    <mat-card [routerLink]="['/kurs',kurs.id]">
+      <mat-card-header>
+        <mat-card-title>
+          {{kurs.fullname}}
+        </mat-card-title>
+      </mat-card-header>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

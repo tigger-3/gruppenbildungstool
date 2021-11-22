@@ -26,7 +26,12 @@ export class LoginScreenComponent implements OnInit {
         next: (v)=>{
         },
         error: (error) => {
-          this.message = `fehlgeschlagen - Fehlercode: ${error.type} - Fehlernachricht: ${error.message}`
+          if(error.type=='invalidlogin'){
+            this.message = `fehlgeschlagen - Ungültiger Benutzer oder Passwort!`
+          }
+          else{
+            this.message = `fehlgeschlagen - Fehlercode: ${error.type} - Fehlernachricht: ${error.message}`
+          }
           this.percentage = 0;
         },
         complete: () => {

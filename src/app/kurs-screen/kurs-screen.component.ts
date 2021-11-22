@@ -4,6 +4,7 @@ import { Gruppe } from '../model/gruppe/gruppe';
 import { Teilnehmer } from '../model/teilnehmer/teilnehmer';
 import { UserService } from '../user-service/user.service';
 import { WebConnectorService } from '../web-connector/web-connector.service';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-kurs-screen',
@@ -34,7 +35,8 @@ export class KursScreenComponent implements OnInit {
     private route: ActivatedRoute,
     private wcs: WebConnectorService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private location: Location
     ) {
       this.gruppenanzahl = 1;
       this.gruppengroesse = 1;
@@ -158,6 +160,15 @@ export class KursScreenComponent implements OnInit {
   resetError(){
     this.errormsg="";
     this.errorsource="";
+  }
+
+  zurueck(){
+    if(this.selectedTab==1){
+      this.selectedTab=0;
+    }
+    else{
+      this.location.back();
+    }
   }
 
 }

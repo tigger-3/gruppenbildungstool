@@ -8,6 +8,7 @@
 <p>
   {{token}}
 </p> -->
+<button mat-flat-button [routerLink]="['/login']" *ngIf="isLoggedIn()" color="warn">Abmelden</button>
 
 <router-outlet></router-outlet>
 
