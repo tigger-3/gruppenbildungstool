@@ -5,6 +5,7 @@ import { Teilnehmer } from '../model/teilnehmer/teilnehmer';
 import { UserService } from '../user-service/user.service';
 import { WebConnectorService } from '../web-connector/web-connector.service';
 import { Location } from '@angular/common'
+import { ConfigService } from '../config/config.service';
 
 @Component({
   selector: 'app-kurs-screen',
@@ -21,7 +22,8 @@ export class KursScreenComponent implements OnInit {
   gruppen: Gruppe[] = [];
 
   errormsg: string = "";
-  errorsource: string = ""
+  errorsource: string = "";
+  groupingError: boolean = false;
 
   selectedTab = 0;
 
@@ -35,6 +37,7 @@ export class KursScreenComponent implements OnInit {
     private route: ActivatedRoute,
     private wcs: WebConnectorService,
     private userService: UserService,
+    private cfg: ConfigService,
     private router: Router,
     private location: Location
     ) {
@@ -132,8 +135,8 @@ export class KursScreenComponent implements OnInit {
   }
   private sendGroupsAfterGroupingCreated(groupingid?:number){
     let groupsToGo = this.gruppen.length
-    let error = false;
-    let groupsCompleted = [];
+    let hasFailed = false;
+    let groupsCompleted: Gruppe[] = [];
     this.gruppen.forEach((group) =>
           this.wcs.createGroup(this.userService.token!,this.kursid!,group.name,'').subscribe(
             {
@@ -141,9 +144,14 @@ export class KursScreenComponent implements OnInit {
               error: (error)=>{
                 if(error.type=='invalidparameter'){
                   this.errormsg = "Die Gruppennamen dürfen weder leer sein, noch den Namen von bereits bestehenden Gruppen entsprechen!"
-                  error=true;
-                  //TODO revert completed groups
-                  //TODO revert grouping
+                  hasFailed=true;
+                  groupsCompleted.forEach((revgroup)=>this.revertGroup(revgroup));
+                  if(groupingid){
+                    this.revertGrouping(groupingid)
+                  }
+                  else{
+                    this.groupingError = true;
+                  }
                 }
               },
               complete: ()=>{
@@ -156,11 +164,11 @@ export class KursScreenComponent implements OnInit {
                     })
                   })
 
-                  if(error){
-                    //TODO revert group
+                  if(!hasFailed){
+                    groupsCompleted.push(group)
                   }
                   else{
-                    groupsCompleted.push(group)
+                    this.revertGroup(group)
                   }
                   if(--groupsToGo==0){this.router.navigate(['/complete', this.kursid!])}
               }
@@ -169,9 +177,25 @@ export class KursScreenComponent implements OnInit {
         )
   }
 
+  getGroupingPage(){
+    return `${this.cfg.moodle_address}/group/groupings.php?id=${this.kursid}`
+  }
+  getGroupPage(){
+    return `${this.cfg.moodle_address}/group/index.php?id=${this.kursid}`
+  }
+
+  revertGroup(group: Gruppe){
+    this.wcs.deleteGroup(this.userService.token!, group.id!);
+  }
+
+  revertGrouping(groupingId: number){
+    this.wcs.deleteGrouping(this.userService.token!, groupingId);
+  }
+
   resetError(){
     this.errormsg="";
     this.errorsource="";
+    this.groupingError=false;
   }
 
   zurueck(){

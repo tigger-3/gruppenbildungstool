@@ -28,10 +28,10 @@ export class WebConnectorService {
       {'headers':{'Accept':'application/json','Content-type':'application/x-www-form-urlencoded'}}
     ).pipe(
       map((res: any) => {
-        if(res['error']){
+        if(res!=null && res['error']){
           throw {type:res['errorcode'],message:res['error']}
         }
-        if(res['exception']){
+        if(res!=null && res['exception']){
           throw {type:res['errorcode'],message:res['exception']}
         }
         return res
@@ -121,7 +121,14 @@ export class WebConnectorService {
     )
   }
 
-  //returns id
+  deleteGrouping(token: string, groupingid: number){
+    return this.sendApiRequest(
+      "core_group_delete_groupings",
+      token,
+      `groupingids[0]=${groupingid}`
+    )
+  }
+
   createGroup(token: string, kursid: number, name: string, description: string){
     return this.sendApiRequest(
       "core_group_create_groups",
@@ -131,6 +138,14 @@ export class WebConnectorService {
       map((res) => {
         return res[0]['id'];
       })
+    )
+  }
+
+  deleteGroup(token: string, groupid: number){
+    return this.sendApiRequest(
+      "core_group_delete_groups",
+      token,
+      `groupids[0]=${groupid}`
     )
   }
 

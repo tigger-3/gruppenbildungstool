@@ -1,4 +1,8 @@
 <p #error>{{errormsg}}</p>
+<p #groupingerror *ngIf="groupingError">
+  Durch einen Fehler mit der Moodle Konnektivität müssen Sie <a [href]="getGroupingPage()">hier</a> einmal die erstellte Gruppenarbeit löschen.<br>
+  Gegebenenfalls müssen Sie auch die erstellten Gruppen <a [href]="getGroupPage()">hier</a> löschen. (Das funktioniert leider nicht immer automatisch.)
+</p>
 <!-- <mat-grid-list cols="2">
   <mat-grid-tile> -->
     <mat-label>Gruppenanzahl: {{gruppenanzahl}}</mat-label>
